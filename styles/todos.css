@@ -1,12 +1,43 @@
 @import url("./import.css");
 
+/* -----------------HEADER SECTION----------------- */
+header
+{
+    width: 100%;
+}
+
 .top-black
 {
     background-color: var(--black);
-    position: relative;
+    height: 3rem;
 }
 
 .top-black img
 {
-    position: absolute;
+    position: fixed;
+    top: 2%;
+    left: 40%;
+    width: 4rem;
+    height: 4rem;
+}
+
+/* -----------------FOOTER SECTION----------------- */
+.bottom-gray
+{
+    background: #EEE;
+    height: 3rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.bottom-gray img
+{
+    cursor: pointer;
+    position: fixed;
+    bottom: 10%;
+    width: 4rem;
+    height: 4rem;
+    bottom: 2%;
+    left: 40%;
 }
