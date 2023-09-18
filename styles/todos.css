@@ -1,0 +1,12 @@
+@import url("./import.css");
+
+.top-black
+{
+    background-color: var(--black);
+    position: relative;
+}
+
+.top-black img
+{
+    position: absolute;
+}
