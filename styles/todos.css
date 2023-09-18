@@ -21,10 +21,60 @@ header
     height: 4rem;
 }
 
+/* -----------------GRID SECTION----------------- */
+.grid-container
+{
+    display: grid;
+    margin: 4rem 1rem;
+    gap: 1rem;
+}
+
+.grid-item
+{
+    background-color: var(--gray);
+    border-radius: 10px;
+    padding: 10px
+}
+
+.grid-item img
+{
+    width: 20px;
+    height: 20px;
+}
+
+.blank-circle
+{
+    border-radius: 100%;
+    border: 1px solid black;
+    width: 10px;
+    height: 10px;
+}
+
+.first-line,
+.task-controls,
+.info
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.first-line
+{
+    justify-content: space-between;
+}
+
+.info
+{
+    gap: 8px;
+}
+
+
+
 /* -----------------FOOTER SECTION----------------- */
 .bottom-gray
 {
-    background: #EEE;
+    background: var(--gray);
     height: 3rem;
     position: fixed;
     bottom: 0;
