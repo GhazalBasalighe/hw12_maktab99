@@ -1,9 +1,13 @@
 {
-  "posts": [
-    { "id": 1, "title": "json-server", "author": "typicode" }
-  ],
-  "comments": [
-    { "id": 1, "body": "some comment", "postId": 1 }
-  ],
-  "profile": { "name": "typicode" }
+  "tasks": [
+    {
+      "title": "2132",
+      "description": "evfreve",
+      "dueDate": "0023-02-03",
+      "createdAt": "2023-09-18T21:49:59.865Z",
+      "updatedAt": "2023-09-18T21:49:59.865Z",
+      "isDone": false,
+      "id": 1
+    }
+  ]
 }
