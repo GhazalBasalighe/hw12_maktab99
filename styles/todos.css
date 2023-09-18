@@ -40,6 +40,7 @@ header
 {
     width: 20px;
     height: 20px;
+    cursor: pointer;
 }
 
 .blank-circle
@@ -48,6 +49,27 @@ header
     border: 1px solid black;
     width: 10px;
     height: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.blank-circle.checked
+{
+    background-color: rgb(27, 167, 27);
+    border: none;
+    transform: scale(1.5);
+    /* Increase size when checked */
+}
+
+.grid-item.checked
+{
+    text-decoration: line-through;
+    color: rgba(44, 43, 43, 0.605);
+}
+
+.edit-icon.checked
+{
+    display: none;
 }
 
 .first-line,
@@ -57,6 +79,11 @@ header
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.task-controls
+{
+    gap: 5px;
 }
 
 .first-line
