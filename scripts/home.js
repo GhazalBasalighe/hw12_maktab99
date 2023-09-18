@@ -41,8 +41,8 @@ formElem.addEventListener("submit", (e) => {
     className: "toast-animated-border", // Add the CSS class for the animated border
   }).showToast();
   // resseting the inputs of form
-  // formElem.reset();
-  // setTimeout(() => {
-  //   window.location.href = "../Todos.html";
-  // }, 1000);
+  formElem.reset();
+  setTimeout(() => {
+    window.location.href = "../html content/Todos.html";
+  }, 1000);
 });
