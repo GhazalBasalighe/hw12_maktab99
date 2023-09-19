@@ -59,7 +59,6 @@ gridContainer.addEventListener("click", async (event) => {
     const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
       method: "DELETE",
     });
-    target.remove();
   }
 });
 

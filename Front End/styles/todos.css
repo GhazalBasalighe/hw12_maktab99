@@ -141,3 +141,67 @@ header
     bottom: 2%;
     left: 40%;
 }
+
+/* -----------------MODAL SECTION----------------- */
+.modal
+{
+    position: fixed;
+    background-color: var(--gray);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 10px;
+    z-index: 10;
+    padding: 0.5rem;
+    top: 15rem;
+    left: 5%;
+    right: 5%;
+    /* display: none; */
+}
+
+.modal-header
+{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-header img
+{
+    width: 2rem;
+}
+
+.modal-title
+{
+    font-size: 1.5rem;
+}
+
+.modal-content
+{
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+    margin: 0.2rem 0;
+    padding: 0.8rem 0;
+}
+
+.modal-buttons
+{
+    align-self: center;
+}
+
+.modal button
+{
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+}
+
+#cancelDeleteBtn
+{
+    background-color: rgba(255, 0, 0, 0.799);
+}
