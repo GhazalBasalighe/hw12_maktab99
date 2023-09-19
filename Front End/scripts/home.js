@@ -58,3 +58,9 @@ formElem.addEventListener("submit", async (e) => {
     }).showToast();
   }
 });
+
+const btnCancel = document.querySelector(".btnCancel");
+btnCancel.addEventListener(
+  "click",
+  () => (window.location.href = "../html content/Todos.html")
+);
