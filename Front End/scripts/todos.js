@@ -23,7 +23,7 @@ async function generateTasks() {
                               <p>${task.dueDate}</p>
                            </div>
                            <div class="task-controls">
-                              <div class="edit-icon"><img src="../images/icon edit.svg" alt="edit icon"></div>
+                              <div><img src="../images/icon edit.svg" alt="edit icon" class="edit-icon"></div>
                               <div><img src="../images/icon delete.svg" alt="delete icon" class="delete-icon"></div>
                            </div>
                         </div>
@@ -74,6 +74,25 @@ gridContainer.addEventListener("click", async (event) => {
         //redirect to notfound page
         window.location.href = "../html content/Not Found.html";
       }
+    }
+  } else if (event.target.classList.contains("edit-icon")) {
+    const gridItem = event.target.closest(".grid-item");
+    const pageUrl = new URLSearchParams(window.location.href);
+    console.log(pageUrl);
+    if (gridItem) {
+      const taskId = gridItem.dataset.taskId;
+      try {
+        const response = await fetch(
+          `http://localhost:3000/tasks/${taskId}`
+        );
+        if (response.ok) {
+          location.assign(
+            `http://127.0.0.1:5500/html%20content/Home.html?id=${taskId}`
+          );
+        } else {
+          window.location.href = "../html content/Not Found.html";
+        }
+      } catch {}
     }
   }
 });
@@ -142,10 +161,4 @@ async function deleteTask(taskId) {
 //       console.log(error.massage);
 //     }
 //   });
-// });
-
-// checkButton.addEventListener("click", () => {
-//   checkButton.classList.toggle("checked");
-//   gridItem.classList.toggle("checked");
-//   editIcon.classList.toggle("checked");
 // });
