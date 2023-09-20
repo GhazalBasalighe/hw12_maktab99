@@ -31,6 +31,7 @@ formElem.addEventListener("submit", async (e) => {
             title: titleInput.value,
             description: descriptionInput.value,
             dueDate: dateInput.value,
+            updatedAt: new Date(),
           }),
           headers: {
             "Content-Type": "application/json;charset=utf-8",
