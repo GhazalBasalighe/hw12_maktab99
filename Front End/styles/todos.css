@@ -185,6 +185,18 @@ header
     padding: 0.8rem 0;
 }
 
+.modal-info
+{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
 .modal-buttons
 {
     align-self: center;
@@ -207,6 +219,20 @@ header
     background-color: rgba(255, 0, 0, 0.799);
 }
 
+#cancelDeleteBtn:hover
+{
+    background-color: rgba(249, 34, 34, 0.799);
+    transform: scale(1.1);
+    transition: transform 0.5s ease-in-out;
+}
+
+#confirmDeleteBtn:hover
+{
+    background-color: #24aecd;
+    transform: scale(1.1);
+    transition: transform 0.5s ease-in-out;
+}
+
 /* overlay for showing the modal */
 .overlay
 {
@@ -220,4 +246,32 @@ header
     z-index: 9;
     /* Behind the modal */
     display: none;
+}
+
+/* ANIMATION FOR MODAL BORDER DURING APPEAREANCE */
+@keyframes pulse
+{
+    0%
+    {
+        border-color: var(--gray);
+    }
+
+    50%
+    {
+        border-color: var(--blue);
+    }
+
+    100%
+    {
+        border-color: var(--gray);
+    }
+}
+
+.animated-border
+{
+    animation: pulse 2s infinite;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+    padding: 10px;
 }

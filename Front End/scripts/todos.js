@@ -1,9 +1,4 @@
-const checkButton = document.querySelectorAll("#checked-btn");
 const gridContainer = document.querySelector(".grid-container");
-const gridItem = document.querySelector(".grid-item");
-const editIcon = document.querySelector(".edit-icon");
-const deleteIcon = document.querySelectorAll(".delete-icon");
-const modal = document.querySelector(".modal");
 
 //------------RENDERING TASKS AND GET REQUEST-------------
 async function renderTasks() {
@@ -40,51 +35,96 @@ async function generateTasks() {
 }
 generateTasks();
 
-//------------DELETE TASK FROM DATABASE-------------
-// deleteIcon.forEach((element) => {
-//   element.addEventListener("click", async () => {
-//     const gridItem = element.closest(".grid-item");
-//     const taskId = gridItem.dataset.taskId; // Get the task ID from the data attribute
-//     // const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-//     //   method: "DELETE",
-//     // });
-//     // let response2 = await response.json();
-//     console.log("hellooooo");
-//   });
-// });
+//------------GENERATE MODALS FOR TASKS-------------
+async function generateModal(task) {
+  const content = `<div class="modal animated-border" data-task-id="${task.id}">
+                          <div class="modal-header">
+                              <img src="../images/icon warning.svg" alt="warning">
+                              <span class="modal-title">Delete</span>
+                          </div>
+                          <div class="modal-content">
+                              <p>Do You Want To Delete This Task?</p>
+                              <div class="modal-info">
+                                 <p>${task.title}</p>
+                                 <p>${task.dueDate}</p>
+                              </div>
+                          </div>
+                          <div class="modal-buttons">
+                              <button type="submit" id="confirmDeleteBtn">Delete</button>
+                              <button id="cancelDeleteBtn">Cancel</button>
+                          </div>
+                    </div>`;
+  document.body.insertAdjacentHTML("beforeend", content);
+}
+
+//------------DELETE MODAL TOGGLE-------------
 gridContainer.addEventListener("click", async (event) => {
   if (event.target.classList.contains("delete-icon")) {
-    showModal();
-    const target = event.target;
-    const gridItem = target.closest(".grid-item");
-    const taskId = gridItem.dataset.taskId; // Get the task ID from the data attribute
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: "DELETE",
-    });
+    const gridItem = event.target.closest(".grid-item");
+    if (gridItem) {
+      const taskId = gridItem.dataset.taskId;
+      try {
+        let response = await fetch(
+          `http://localhost:3000/tasks/${taskId}`
+        );
+        let task = await response.json();
+        generateModal(task);
+        showModal(task.id);
+      } catch (error) {
+        console.log(error.massage);
+        //redirect to notfound page
+      }
+    }
   }
 });
 
-// Function to show the modal
-function showModal() {
+//function to show modal when it's clicked on delete-icon
+function showModal(taskId) {
+  const modal = document.querySelector(`.modal[data-task-id="${taskId}"]`);
   const overlay = document.querySelector(".overlay");
 
-  modal.style.top = "15rem"; // Slide the modal down
-  overlay.style.display = "block"; // Show the overlay
-  modal.style.display = "flex"; // Show the modal
+  if (modal && overlay) {
+    modal.style.display = "flex";
+    overlay.style.display = "block";
+  }
 }
 
-// Function to hide the modal
-function hideModal() {
+//defining which task this modal belongs to
+document.addEventListener("click", (event) => {
+  if (event.target.id === "cancelDeleteBtn") {
+    const modal = event.target.closest(".modal");
+    if (modal) {
+      hideModal(modal);
+    }
+  } else if (event.target.id === "confirmDeleteBtn") {
+    const modal = event.target.closest(".modal");
+    const taskId = modal.dataset.taskId;
+    const gridItem = document.querySelector(
+      `.grid-item[data-task-id="${taskId}"]`
+    );
+    if (gridItem) {
+      gridItem.remove();
+      hideModal(modal);
+      deleteTask(gridItem.dataset.taskId);
+    }
+  }
+});
+
+//function to hide modal when it's clicked on cancel button
+function hideModal(modal) {
   const overlay = document.querySelector(".overlay");
 
-  modal.style.top = "-100%"; // Slide the modal off-screen
-  overlay.style.display = "none"; // Hide the overlay
-  modal.style.display = "none"; // Hide the modal
+  if (modal && overlay) {
+    modal.style.display = "none";
+    overlay.style.display = "none";
+  }
 }
 
-// Example: Add event listener to close button inside the modal to hide it
-const closeModalButton = document.querySelector("#cancelDeleteBtn");
-closeModalButton.addEventListener("click", hideModal);
+async function deleteTask(taskId) {
+  const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+    method: "DELETE",
+  });
+}
 
 // checkButton.forEach((item) => {
 //   item.addEventListener("click", async function () {
