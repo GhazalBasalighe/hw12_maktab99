@@ -37,7 +37,7 @@ formElem.addEventListener("submit", async (e) => {
             "Content-Type": "application/json;charset=utf-8",
           },
         }
-      );
+      ).then(() => (editMode = false));
     } else {
       const response = await fetch("http://localhost:3000/tasks", {
         method: "POST",
@@ -97,16 +97,16 @@ btnCancel.addEventListener(
 
 const urlParams = new URLSearchParams(window.location.search);
 const taskId = +urlParams.get("id");
-if (urlParams) {
+if (taskId) {
   editMode = true;
   btnAdd.textContent = "Save";
+  (async () => {
+    try {
+      let response = await fetch(`http://localhost:3000/tasks/${taskId}`);
+      let response2 = await response.json();
+      titleInput.value = response2.title;
+      descriptionInput.value = response2.description;
+      dateInput.value = response2.dueDate;
+    } catch {}
+  })();
 }
-(async () => {
-  try {
-    let response = await fetch(`http://localhost:3000/tasks/${taskId}`);
-    let response2 = await response.json();
-    titleInput.value = response2.title;
-    descriptionInput.value = response2.description;
-    dateInput.value = response2.dueDate;
-  } catch {}
-})();
