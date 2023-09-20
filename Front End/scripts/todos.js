@@ -1,4 +1,5 @@
 const gridContainer = document.querySelector(".grid-container");
+const checkbox = document.querySelector("#checked-btn");
 
 //------------RENDERING TASKS AND GET REQUEST-------------
 async function renderTasks() {
@@ -57,8 +58,8 @@ async function generateModal(task) {
   document.body.insertAdjacentHTML("beforeend", content);
 }
 
-//------------DELETE MODAL TOGGLE-------------
 gridContainer.addEventListener("click", async (event) => {
+  //------------DELETE MODAL AND TASK-------------
   if (event.target.classList.contains("delete-icon")) {
     const gridItem = event.target.closest(".grid-item");
     if (gridItem) {
@@ -75,6 +76,7 @@ gridContainer.addEventListener("click", async (event) => {
         window.location.href = "../html content/Not Found.html";
       }
     }
+    //------------EDIT TASK-------------
   } else if (event.target.classList.contains("edit-icon")) {
     const gridItem = event.target.closest(".grid-item");
     const pageUrl = new URLSearchParams(window.location.href);
@@ -94,6 +96,22 @@ gridContainer.addEventListener("click", async (event) => {
         }
       } catch {}
     }
+  } else if (event.target.classList.contains("blank-circle")) {
+    const checkbox = document.querySelector("#checked-btn");
+    const gridItem = checkbox.closest(".grid-item");
+    const taskId = gridItem.dataset.taskId;
+    try {
+      const response = await fetch(
+        `http://localhost:3000/tasks/${taskId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+          },
+          body: JSON.stringify({ isDone: checkbox.checked }),
+        }
+      );
+    } catch {}
   }
 });
 
@@ -138,27 +156,14 @@ function hideModal(modal) {
     overlay.style.display = "none";
   }
 }
-
+//function to delete task from database
 async function deleteTask(taskId) {
   const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
     method: "DELETE",
   });
 }
 
-// checkButton.forEach((item) => {
-//   item.addEventListener("click", async function () {
-//     const taskId = this.getAttribute("data-taskId");
-//     const status = this.getAttribute("data-status");
-//     try {
-//       let response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-//         method: "PATCH",
-//         headers: {
-//           "Content-Type": "application/json;charset=utf-8",
-//         },
-//         body: JSON.stringify({ isDone: status === "done" ? false : true }),
-//       });
-//     } catch (error) {
-//       console.log(error.massage);
-//     }
-//   });
-// });
+async () => {
+  const checkbox = document.querySelector("#checked-btn");
+  console.log(checkbox.checked);
+};
