@@ -147,7 +147,6 @@ header
 {
     position: fixed;
     background-color: var(--gray);
-    display: flex;
     flex-direction: column;
     justify-content: center;
     border-radius: 10px;
@@ -156,7 +155,9 @@ header
     top: 15rem;
     left: 5%;
     right: 5%;
-    /* display: none; */
+    display: none;
+    transition: top 0.5s ease-in-out;
+    /* Animation for modal */
 }
 
 .modal-header
@@ -204,4 +205,19 @@ header
 #cancelDeleteBtn
 {
     background-color: rgba(255, 0, 0, 0.799);
+}
+
+/* overlay for showing the modal */
+.overlay
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black overlay */
+    z-index: 9;
+    /* Behind the modal */
+    display: none;
 }

@@ -3,6 +3,7 @@ const gridContainer = document.querySelector(".grid-container");
 const gridItem = document.querySelector(".grid-item");
 const editIcon = document.querySelector(".edit-icon");
 const deleteIcon = document.querySelectorAll(".delete-icon");
+const modal = document.querySelector(".modal");
 
 //------------RENDERING TASKS AND GET REQUEST-------------
 async function renderTasks() {
@@ -53,6 +54,7 @@ generateTasks();
 // });
 gridContainer.addEventListener("click", async (event) => {
   if (event.target.classList.contains("delete-icon")) {
+    showModal();
     const target = event.target;
     const gridItem = target.closest(".grid-item");
     const taskId = gridItem.dataset.taskId; // Get the task ID from the data attribute
@@ -61,6 +63,28 @@ gridContainer.addEventListener("click", async (event) => {
     });
   }
 });
+
+// Function to show the modal
+function showModal() {
+  const overlay = document.querySelector(".overlay");
+
+  modal.style.top = "15rem"; // Slide the modal down
+  overlay.style.display = "block"; // Show the overlay
+  modal.style.display = "flex"; // Show the modal
+}
+
+// Function to hide the modal
+function hideModal() {
+  const overlay = document.querySelector(".overlay");
+
+  modal.style.top = "-100%"; // Slide the modal off-screen
+  overlay.style.display = "none"; // Hide the overlay
+  modal.style.display = "none"; // Hide the modal
+}
+
+// Example: Add event listener to close button inside the modal to hide it
+const closeModalButton = document.querySelector("#cancelDeleteBtn");
+closeModalButton.addEventListener("click", hideModal);
 
 // checkButton.forEach((item) => {
 //   item.addEventListener("click", async function () {
