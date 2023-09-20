@@ -71,8 +71,8 @@ gridContainer.addEventListener("click", async (event) => {
         generateModal(task);
         showModal(task.id);
       } catch (error) {
-        console.log(error.massage);
         //redirect to notfound page
+        window.location.href = "../html content/Not Found.html";
       }
     }
   }
