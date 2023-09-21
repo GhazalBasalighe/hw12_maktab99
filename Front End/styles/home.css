@@ -178,12 +178,12 @@ input[type="date"]:focus
     }
 
     .form-section input
-    {}
+    {
+        padding: 15px;
+    }
 
     body
     {
-
-
         background: rgb(238, 238, 238);
         background: linear-gradient(90deg, rgba(238, 238, 238, 1) 0%, rgba(26, 184, 219, 1) 100%);
     }
