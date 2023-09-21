@@ -151,3 +151,40 @@ input[type="date"]:focus
 {
     animation: input-focus-animation 0.3s ease-in-out;
 }
+
+/* -----------------BREAKPOINT SECTION----------------- */
+@media (min-width:700px)
+{
+    .container
+    {
+        margin: 0 auto;
+        width: 700px;
+        margin-top: 4rem;
+        padding: 1rem;
+
+        /* From https://css.glass */
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: none;
+    }
+
+    .form-section
+    {
+        gap: 1rem;
+    }
+
+    .form-section input
+    {}
+
+    body
+    {
+
+
+        background: rgb(238, 238, 238);
+        background: linear-gradient(90deg, rgba(238, 238, 238, 1) 0%, rgba(26, 184, 219, 1) 100%);
+    }
+}

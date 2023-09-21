@@ -275,3 +275,46 @@ header
     border-radius: 5px;
     padding: 10px;
 }
+
+/* -----------------BREAKPOINT SECTION----------------- */
+@media (min-width:500px)
+{
+
+    .top-black img,
+    .bottom-gray img
+    {
+        left: 45%;
+    }
+}
+
+@media (min-width:800px)
+{
+    .grid-container
+    {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width:1280px)
+{
+
+    .top-black img
+    {
+        left: 48%;
+    }
+
+    .bottom-gray img
+    {
+        right: 0;
+        left: 94%;
+        bottom: 8%;
+        width: 5rem;
+        height: 5rem;
+        z-index: 1;
+    }
+
+    .grid-container
+    {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
