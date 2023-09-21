@@ -1,6 +1,5 @@
 const formElem = document.querySelector("#task-form");
 const btnCancel = document.querySelector(".btnCancel");
-const btnAdd = document.querySelector(".btnAdd");
 
 const titleInput = document.querySelector("#title");
 const descriptionInput = document.querySelector("#description");
@@ -37,7 +36,8 @@ formElem.addEventListener("submit", async (e) => {
             "Content-Type": "application/json;charset=utf-8",
           },
         }
-      ).then(() => (editMode = false));
+      );
+      editMode = false;
     } else {
       const response = await fetch("http://localhost:3000/tasks", {
         method: "POST",
@@ -94,12 +94,15 @@ btnCancel.addEventListener(
 );
 
 // // Check if the URL contains the 'taskId' query parameter
+const btnAdd = document.querySelector(".btnAdd");
+const addTask = document.querySelector(".add-task-title");
 
 const urlParams = new URLSearchParams(window.location.search);
 const taskId = +urlParams.get("id");
 if (taskId) {
   editMode = true;
   btnAdd.textContent = "Save";
+  addTask.textContent = "Edit Task";
   (async () => {
     try {
       let response = await fetch(`http://localhost:3000/tasks/${taskId}`);

@@ -55,35 +55,6 @@ header
     display: block;
 }
 
-.blank-circle
-{
-    border-radius: 100%;
-    border: 1px solid black;
-    width: 10px;
-    height: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.blank-circle.checked
-{
-    background-color: rgb(27, 167, 27);
-    border: none;
-    transform: scale(1.5);
-    /* Increase size when checked */
-}
-
-.grid-item.checked
-{
-    text-decoration: line-through;
-    color: rgba(44, 43, 43, 0.605);
-}
-
-.edit-icon.checked
-{
-    display: none;
-}
-
 .first-line,
 .task-controls,
 .info
@@ -179,10 +150,13 @@ header
 
 .modal-content
 {
-    border-bottom: 1px solid white;
-    border-top: 1px solid white;
+    border-bottom: 2px solid white;
+    border-top: 2px solid white;
     margin: 0.2rem 0;
     padding: 0.8rem 0;
+    -webkit-box-shadow: inset 4px 10px 13px -12px rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: inset 4px 10px 13px -12px rgba(0, 0, 0, 0.16);
+    box-shadow: inset 4px 10px 13px -12px rgba(0, 0, 0, 0.16);
 }
 
 .modal-info
@@ -292,6 +266,13 @@ header
     .grid-container
     {
         grid-template-columns: 1fr 1fr;
+        margin: 4rem 3rem;
+    }
+
+    .modal
+    {
+        left: 15%;
+        right: 15%;
     }
 }
 
@@ -316,5 +297,25 @@ header
     .grid-container
     {
         grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .modal
+    {
+        left: 30%;
+        right: 30%;
+    }
+
+    .grid-item
+    {
+        font-size: 18px;
+        padding: 20px;
+    }
+}
+
+@media (min-width:1280px)
+{
+    .grid-container
+    {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }

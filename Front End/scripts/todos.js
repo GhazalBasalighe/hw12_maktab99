@@ -1,5 +1,4 @@
 const gridContainer = document.querySelector(".grid-container");
-const checkbox = document.querySelector("#checked-btn");
 
 //------------RENDERING TASKS AND GET REQUEST-------------
 async function renderTasks() {
@@ -19,7 +18,7 @@ async function generateTasks() {
     const content = `<div class="grid-item" data-task-id="${task.id}">
                         <div class="first-line">
                            <div class="info">
-                            <input type="checkbox" name="checkbox" class="blank-circle" id="checked-btn">
+                            <input type="checkbox" name="checkbox" class="checkbox" id="checked-btn">
                               <h6>${task.title}</h6>
                               <p>${task.dueDate}</p>
                            </div>
@@ -57,7 +56,6 @@ async function generateModal(task) {
                     </div>`;
   document.body.insertAdjacentHTML("beforeend", content);
 }
-
 gridContainer.addEventListener("click", async (event) => {
   //------------DELETE MODAL AND TASK-------------
   if (event.target.classList.contains("delete-icon")) {
@@ -96,10 +94,19 @@ gridContainer.addEventListener("click", async (event) => {
         }
       } catch {}
     }
-  } else if (event.target.classList.contains("blank-circle")) {
-    const checkbox = document.querySelector("#checked-btn");
+  } else if (event.target.classList.contains("checkbox")) {
+    const checkbox = event.target;
     const gridItem = checkbox.closest(".grid-item");
+    console.log(gridItem);
     const taskId = gridItem.dataset.taskId;
+    if (checkbox.checked) {
+      gridItem.style.textDecoration = "line-through";
+      gridItem.style.color = "rgba(44, 43, 43, 0.605)";
+    } else {
+      gridItem.style.textDecoration = "none";
+      gridItem.style.color = "black";
+    }
+    const checkboxElem = document.querySelector("#checked-btn");
     try {
       const response = await fetch(
         `http://localhost:3000/tasks/${taskId}`,
@@ -108,7 +115,7 @@ gridContainer.addEventListener("click", async (event) => {
           headers: {
             "Content-Type": "application/json;charset=utf-8",
           },
-          body: JSON.stringify({ isDone: checkbox.checked }),
+          body: JSON.stringify({ isDone: checkboxElem.checked }),
         }
       );
     } catch {}
@@ -143,6 +150,7 @@ document.addEventListener("click", (event) => {
       gridItem.remove();
       hideModal(modal);
       deleteTask(gridItem.dataset.taskId);
+      modal.remove();
     }
   }
 });
@@ -162,8 +170,3 @@ async function deleteTask(taskId) {
     method: "DELETE",
   });
 }
-
-async () => {
-  const checkbox = document.querySelector("#checked-btn");
-  console.log(checkbox.checked);
-};
