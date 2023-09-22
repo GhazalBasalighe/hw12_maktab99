@@ -9,6 +9,7 @@ const dateInput = document.querySelector("#dueDate");
 
 let editMode = false;
 
+//------------SUBMIT FORM-------------
 formElem.addEventListener("submit", async (e) => {
   // Page not refreshing
   e.preventDefault();
@@ -24,95 +25,77 @@ formElem.addEventListener("submit", async (e) => {
   // Sending the POST request to the server
   try {
     if (editMode) {
-      const response = await fetch(
-        `http://localhost:3000/tasks/${taskId}`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            title: titleInput.value,
-            description: descriptionInput.value,
-            dueDate: dateInput.value,
-            updatedAt: new Date(),
-          }),
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-          },
-        }
+      const formData = Object.fromEntries(
+        new FormData(formElem).entries()
       );
+      updateJSON("PATCH", formData, taskId);
       editMode = false;
-    } else {
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify(formData),
-      });
-    }
+
+      //else -> adding task for the first time !
+    } else updateJSON("POST", formData);
 
     // Displaying toast successful
-    Toastify({
-      text: "Task Added Successfully",
-      style: {
-        background: "linear-gradient(to right, #00b09b, #96c93d)",
-      },
-      offset: {
-        y: 40, // Vertical axis - can be a number or a string indicating unity. eg: '2em'
-      },
-      gravity: "top", // `top` or `bottom`
-      position: "center", // `left`, `center` or `right`
-      stopOnFocus: true, // Prevents dismissing of toast on hover
-      duration: 3000,
-      className: "toast-animated-border", // Add the CSS class for the animated border
-    }).showToast();
+    showToast(
+      "linear-gradient(to right, #00b09b, #96c93d)",
+      "Task Added Successfully"
+    );
 
-    // Resetting the inputs of form
+    // Resetting the inputs of form and redirecting
     setTimeout(() => {
       formElem.reset();
-      window.location.href = "../html content/Todos.html";
+      window.location.href = "../htmlContent/Todos.html";
     }, 3000);
-  } catch (error) {
+  } catch {
     // Displaying toast unsuccessful
-    Toastify({
-      text: "Task Was Not Added",
-      style: {
-        background: "linear-gradient(to right, #ff0000, #cc0000)",
-      },
-      offset: {
-        y: 40, // Vertical axis - can be a number or a string indicating unity. eg: '2em'
-      },
-      gravity: "top", // `top` or ` bottom`
-      position: "center", // `left`, `center`, or `right`
-      stopOnFocus: true, // Prevents dismissing of toast on hover
-      duration: 3000,
-      className: "toast-animated-border", // Add the CSS class for the animated border
-    }).showToast();
+    showToast(
+      "linear-gradient(to right, #ff0000, #cc0000)",
+      "Task Was Not Added"
+    );
   }
 });
 
+//------------CANCEL BUTTON REDIRECT-------------
 btnCancel.addEventListener(
   "click",
-  () => (window.location.href = "../html content/Todos.html")
+  () => (window.location.href = "../htmlContent/Todos.html")
 );
 
-// // Check if the URL contains the 'taskId' query parameter
-const btnAdd = document.querySelector(".btnAdd");
-const addTask = document.querySelector(".add-task-title");
+//------------TURNING HOME PAGE INTO EDIT PAGE-------------
+(async function editPageSettings() {
+  const urlParams = new URLSearchParams(window.location.search);
+  // Check if the URL contains the 'taskId' query parameter
+  const taskId = +urlParams.get("id");
+  if (taskId) {
+    editMode = true;
 
-const urlParams = new URLSearchParams(window.location.search);
-const taskId = +urlParams.get("id");
-await getJSON(taskId);
-if (taskId) {
-  editMode = true;
-  btnAdd.textContent = "Save";
-  addTask.textContent = "Edit Task";
-  (async () => {
-    try {
-      let response = await fetch(`http://localhost:3000/tasks/${taskId}`);
-      let response2 = await response.json();
-      titleInput.value = response2.title;
-      descriptionInput.value = response2.description;
-      dateInput.value = response2.dueDate;
-    } catch {}
-  })();
+    //changing components ui
+    const btnAdd = document.querySelector(".btnAdd");
+    btnAdd.textContent = "Save";
+    const addTask = document.querySelector(".add-task-title");
+    addTask.textContent = "Edit Task";
+
+    //filling the inputs with data
+    const response = await getJSON(taskId);
+    titleInput.value = response.title;
+    descriptionInput.value = response.description;
+    dateInput.value = response.dueDate;
+  }
+})();
+
+//------------TOASTIFY-------------
+function showToast(bgColor, text) {
+  Toastify({
+    text: text,
+    style: {
+      background: bgColor,
+    },
+    offset: {
+      y: 40, // Vertical axis - can be a number or a string indicating unity. eg: '2em'
+    },
+    gravity: "top", // `top` or `bottom`
+    position: "center", // `left`, `center` or `right`
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+    duration: 3000,
+    className: "toast-animated-border", // Add the CSS class for the animated border
+  }).showToast();
 }

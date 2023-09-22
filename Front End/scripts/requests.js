@@ -16,11 +16,11 @@ export async function getJSON(endpoint = "") {
 }
 
 //-----------------PATCH REQUESTS----------------
-export async function updateJSON(method, bodyObject) {
-  if (method === "PATCH") {
+export async function updateJSON(method, bodyObject, endpoint = "") {
+  if (method === "PATCH" || method === "POST") {
     //PATCH REQUESTS
     try {
-      const request = await fetch(apiAddress, {
+      const request = await fetch(`${apiAddress}/${endpoint}`, {
         method: method,
         headers: {
           "Content-Type": "application/json;charset=utf-8",
