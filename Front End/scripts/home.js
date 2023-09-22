@@ -1,3 +1,5 @@
+import { getJSON, updateJSON } from "./requests.js";
+
 const formElem = document.querySelector("#task-form");
 const btnCancel = document.querySelector(".btnCancel");
 
@@ -99,6 +101,7 @@ const addTask = document.querySelector(".add-task-title");
 
 const urlParams = new URLSearchParams(window.location.search);
 const taskId = +urlParams.get("id");
+await getJSON(taskId);
 if (taskId) {
   editMode = true;
   btnAdd.textContent = "Save";

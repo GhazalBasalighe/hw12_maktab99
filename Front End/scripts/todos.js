@@ -1,19 +1,12 @@
+import { getJSON, updateJSON } from "./requests.js";
+
 const gridContainer = document.querySelector(".grid-container");
 
-//------------RENDERING TASKS AND GET REQUEST-------------
-async function renderTasks() {
-  try {
-    let response = await fetch("http://localhost:3000/tasks");
-    let response2 = await response.json();
-    return response2;
-  } catch (error) {
-    console.log(error.massage);
-  }
-}
-
-//------------GENERATE GRID ITEMS-------------
-async function generateTasks() {
-  const tasks = await renderTasks();
+//------------RENDERING TASKS------------
+getJSON();
+// ------------GENERATE GRID ITEMS-------------
+(async function generateTasks() {
+  const tasks = await getJSON();
   tasks.forEach((task) => {
     const content = `<div class="grid-item" data-task-id="${task.id}">
                         <div class="first-line">
@@ -32,8 +25,7 @@ async function generateTasks() {
 `;
     gridContainer.insertAdjacentHTML("beforeend", content);
   });
-}
-generateTasks();
+})();
 
 //------------GENERATE MODALS FOR TASKS-------------
 async function generateModal(task) {
@@ -56,49 +48,33 @@ async function generateModal(task) {
                     </div>`;
   document.body.insertAdjacentHTML("beforeend", content);
 }
+
+//------------EVENT DELEGATION FOR TASKS-------------
+
 gridContainer.addEventListener("click", async (event) => {
   //------------DELETE MODAL AND TASK-------------
   if (event.target.classList.contains("delete-icon")) {
     const gridItem = event.target.closest(".grid-item");
     if (gridItem) {
       const taskId = gridItem.dataset.taskId;
-      try {
-        let response = await fetch(
-          `http://localhost:3000/tasks/${taskId}`
-        );
-        let task = await response.json();
-        generateModal(task);
-        showModal(task.id);
-      } catch (error) {
-        //redirect to notfound page
-        window.location.href = "../html content/Not Found.html";
-      }
+      const task = await getJSON(taskId);
+      generateModal(task);
+      showModal(task.id);
     }
-    //------------EDIT TASK-------------
-  } else if (event.target.classList.contains("edit-icon")) {
+  } //------------EDIT TASK-------------
+  else if (event.target.classList.contains("edit-icon")) {
     const gridItem = event.target.closest(".grid-item");
-    const pageUrl = new URLSearchParams(window.location.href);
-    console.log(pageUrl);
     if (gridItem) {
-      const taskId = gridItem.dataset.taskId;
-      try {
-        const response = await fetch(
-          `http://localhost:3000/tasks/${taskId}`
-        );
-        if (response.ok) {
-          location.assign(
-            `http://127.0.0.1:5500/html%20content/Home.html?id=${taskId}`
-          );
-        } else {
-          window.location.href = "../html content/Not Found.html";
-        }
-      } catch {}
+      const taskId = +gridItem.dataset.taskId;
+      await getJSON(taskId);
+      location.assign(
+        `http://127.0.0.1:5500/htmlContent/Home.html?id=${taskId}`
+      );
     }
-  } else if (event.target.classList.contains("checkbox")) {
+  } //------------CHECK TASK DONE-------------
+  else if (event.target.classList.contains("checkbox")) {
     const checkbox = event.target;
     const gridItem = checkbox.closest(".grid-item");
-    console.log(gridItem);
-    const taskId = gridItem.dataset.taskId;
     if (checkbox.checked) {
       gridItem.style.textDecoration = "line-through";
       gridItem.style.color = "rgba(44, 43, 43, 0.605)";
@@ -107,22 +83,11 @@ gridContainer.addEventListener("click", async (event) => {
       gridItem.style.color = "black";
     }
     const checkboxElem = document.querySelector("#checked-btn");
-    try {
-      const response = await fetch(
-        `http://localhost:3000/tasks/${taskId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-          },
-          body: JSON.stringify({ isDone: checkboxElem.checked }),
-        }
-      );
-    } catch {}
+    await updateJSON("PATCH", { isDone: checkboxElem.checked });
   }
 });
 
-//function to show modal when it's clicked on delete-icon
+//------------SHOW MODAL-------------
 function showModal(taskId) {
   const modal = document.querySelector(`.modal[data-task-id="${taskId}"]`);
   const overlay = document.querySelector(".overlay");
@@ -133,7 +98,17 @@ function showModal(taskId) {
   }
 }
 
-//defining which task this modal belongs to
+//------------HIDE MODAL-------------
+function hideModal(modal) {
+  const overlay = document.querySelector(".overlay");
+
+  if (modal && overlay) {
+    modal.style.display = "none";
+    overlay.style.display = "none";
+  }
+}
+
+//------------CONFIRM OR CANCEL DELETION-------------
 document.addEventListener("click", (event) => {
   if (event.target.id === "cancelDeleteBtn") {
     const modal = event.target.closest(".modal");
@@ -143,30 +118,15 @@ document.addEventListener("click", (event) => {
   } else if (event.target.id === "confirmDeleteBtn") {
     const modal = event.target.closest(".modal");
     const taskId = modal.dataset.taskId;
+    console.log(taskId);
     const gridItem = document.querySelector(
       `.grid-item[data-task-id="${taskId}"]`
     );
     if (gridItem) {
       gridItem.remove();
       hideModal(modal);
-      deleteTask(gridItem.dataset.taskId);
       modal.remove();
+      updateJSON("DELETE", taskId);
     }
   }
 });
-
-//function to hide modal when it's clicked on cancel button
-function hideModal(modal) {
-  const overlay = document.querySelector(".overlay");
-
-  if (modal && overlay) {
-    modal.style.display = "none";
-    overlay.style.display = "none";
-  }
-}
-//function to delete task from database
-async function deleteTask(taskId) {
-  const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-    method: "DELETE",
-  });
-}
