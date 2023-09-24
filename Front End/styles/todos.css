@@ -42,11 +42,6 @@ header
     transition: text-decoration 0.3s, color 0.3s;
 }
 
-.grid-item:nth-child(even)
-{
-    background-color: #B3DFFF;
-}
-
 .grid-item img
 {
     display: none;
@@ -64,6 +59,7 @@ header
 {
     transform: scale(1.05);
     transition: transform 0.2s ease-in-out;
+    background-color: #B3DFFF;
 }
 
 .grid-item:hover img
@@ -132,6 +128,12 @@ header
     left: 40%;
 }
 
+.bottom-gray img:hover
+{
+    transform: scale(1.1);
+    transition: transform 0.1s ease-in-out;
+}
+
 /* PAGINATION STYLES */
 .page-number
 {
@@ -147,6 +149,14 @@ header
     align-items: center;
     cursor: pointer;
     font-family: 'Nunito', sans-serif;
+}
+
+/*active current page class*/
+.active-page
+{
+    background-color: var(--blue);
+    color: var(--white);
+    transition: all 0.3s ease-in-out;
 }
 
 /* -----------------MODAL SECTION----------------- */

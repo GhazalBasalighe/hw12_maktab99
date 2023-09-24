@@ -9,57 +9,6 @@ const dateInput = document.querySelector("#dueDate");
 
 let editMode = false;
 
-//------------SUBMIT FORM-------------
-formElem.addEventListener("submit", async (e) => {
-  // Page not refreshing
-  e.preventDefault();
-
-  // Getting the object of form data
-  const formData = Object.fromEntries(new FormData(formElem).entries());
-
-  // Adding createdAt, updatedAt, isDone properties
-  formData.createdAt = new Date();
-  formData.updatedAt = editMode ? new Date() : formData.createdAt;
-  formData.isDone = false;
-
-  // Sending the POST request to the server
-  try {
-    if (editMode) {
-      const formData = Object.fromEntries(
-        new FormData(formElem).entries()
-      );
-      updateJSON("PATCH", formData, taskId);
-      editMode = false;
-
-      //else -> adding task for the first time !
-    } else updateJSON("POST", formData);
-
-    // Displaying toast successful
-    showToast(
-      "linear-gradient(to right, #00b09b, #96c93d)",
-      "Task Added Successfully"
-    );
-
-    // Resetting the inputs of form and redirecting
-    setTimeout(() => {
-      formElem.reset();
-      window.location.href = "../htmlContent/Todos.html";
-    }, 3000);
-  } catch {
-    // Displaying toast unsuccessful
-    showToast(
-      "linear-gradient(to right, #ff0000, #cc0000)",
-      "Task Was Not Added"
-    );
-  }
-});
-
-//------------CANCEL BUTTON REDIRECT-------------
-btnCancel.addEventListener(
-  "click",
-  () => (window.location.href = "../htmlContent/Todos.html")
-);
-
 //------------TURNING HOME PAGE INTO EDIT PAGE-------------
 (async function editPageSettings() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -81,6 +30,65 @@ btnCancel.addEventListener(
     dateInput.value = response.dueDate;
   }
 })();
+
+//------------SUBMIT FORM-------------
+formElem.addEventListener("submit", async (e) => {
+  // Page not refreshing
+  e.preventDefault();
+
+  // Getting the object of form data
+  const formData = Object.fromEntries(new FormData(formElem).entries());
+
+  // Adding createdAt, updatedAt, isDone properties
+  formData.createdAt = new Date();
+  formData.updatedAt = editMode ? new Date() : formData.createdAt;
+  formData.isDone = false;
+
+  // Sending the POST request to the server
+  try {
+    if (editMode) {
+      const formData = Object.fromEntries(
+        new FormData(formElem).entries()
+      );
+      const pageAddress = new URL(window.location.href);
+      const taskId = pageAddress.searchParams.get("id");
+      updateJSON("PATCH", formData, taskId).then(() => {
+        // Displaying toast successful
+        showToast(
+          "linear-gradient(to right, #00b09b, #96c93d)",
+          "Task Edited Successfully"
+        );
+      });
+      editMode = false;
+    } else {
+      updateJSON("POST", formData).then(() => {
+        console.log("successful promise");
+        // Displaying toast successful
+        showToast(
+          "linear-gradient(to right, #00b09b, #96c93d)",
+          "Task Added Successfully"
+        );
+      });
+    }
+    // Resetting the inputs of form and redirecting
+    setTimeout(() => {
+      formElem.reset();
+      window.location.href = "../htmlContent/Todos.html";
+    }, 3000);
+  } catch (error) {
+    // Displaying toast unsuccessful
+    showToast(
+      "linear-gradient(to right, #ff0000, #cc0000)",
+      "Task Was Not Added"
+    );
+  }
+});
+
+//------------CANCEL BUTTON REDIRECT-------------
+btnCancel.addEventListener(
+  "click",
+  () => (window.location.href = "../htmlContent/Todos.html")
+);
 
 //------------TOASTIFY-------------
 function showToast(bgColor, text) {

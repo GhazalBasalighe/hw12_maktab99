@@ -5,7 +5,7 @@ export async function getJSON(endpoint = "") {
   try {
     const url = `${apiAddress}/${endpoint}`;
     const request = await fetch(url);
-    if (!request.ok) {
+    if (request.status !== 200) {
       window.location.href = "../htmlContent/NotFound.html";
     }
     const response = await request.json();
@@ -15,10 +15,12 @@ export async function getJSON(endpoint = "") {
   }
 }
 
-//-----------------PATCH REQUESTS----------------
+//-----------------PATCH & PATCH REQUESTS----------------
 export async function updateJSON(method, bodyObject, endpoint = "") {
+  let redirectionNeeded = false;
+
   if (method === "PATCH" || method === "POST") {
-    //PATCH REQUESTS
+    // PATCH & POST REQUESTS
     try {
       const request = await fetch(`${apiAddress}/${endpoint}`, {
         method: method,
@@ -27,12 +29,16 @@ export async function updateJSON(method, bodyObject, endpoint = "") {
         },
         body: JSON.stringify(bodyObject),
       });
+      if (!request.ok) {
+        redirectionNeeded = true;
+      }
+
       await request.json();
     } catch {
-      window.location.href = "../htmlContent/NotFound.html";
+      redirectionNeeded = true;
     }
   } else if (method === "DELETE") {
-    //DELETE REQUESTS
+    // DELETE REQUESTS
     try {
       const response = await fetch(
         `http://localhost:3000/tasks/${bodyObject}`,
@@ -40,11 +46,15 @@ export async function updateJSON(method, bodyObject, endpoint = "") {
           method: "DELETE",
         }
       );
-      if (!response.ok) {
-        window.location.href = "../htmlContent/NotFound.html";
+      if (response.status !== 200) {
+        redirectionNeeded = true;
       }
     } catch {
-      window.location.href = "../htmlContent/NotFound.html";
+      redirectionNeeded = true;
     }
+  }
+
+  if (redirectionNeeded) {
+    window.location.href = "../htmlContent/NotFound.html";
   }
 }
