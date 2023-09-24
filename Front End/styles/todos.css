@@ -19,7 +19,7 @@ header
 
 .top-black img
 {
-    position: fixed;
+    position: absolute;
     top: 2%;
     left: 40%;
     width: 4rem;
@@ -31,7 +31,7 @@ header
 {
     display: grid;
     margin: 4rem 1rem;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .grid-item
@@ -42,12 +42,28 @@ header
     transition: text-decoration 0.3s, color 0.3s;
 }
 
+.grid-item:nth-child(even)
+{
+    background-color: #B3DFFF;
+}
+
 .grid-item img
 {
     display: none;
     width: 20px;
     height: 20px;
     cursor: pointer;
+}
+
+.grid-item img:hover
+{
+    transform: scale(1.2);
+}
+
+.grid-item:hover
+{
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
 }
 
 .grid-item:hover img
@@ -100,6 +116,9 @@ header
     position: fixed;
     bottom: 0;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .bottom-gray img
@@ -111,6 +130,23 @@ header
     height: 4rem;
     bottom: 2%;
     left: 40%;
+}
+
+/* PAGINATION STYLES */
+.page-number
+{
+    padding: 5px;
+    margin: 5px;
+    z-index: 10;
+    border: 1px solid var(--blue);
+    border-radius: 5px;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
 }
 
 /* -----------------MODAL SECTION----------------- */
@@ -153,7 +189,7 @@ header
     border-bottom: 2px solid white;
     border-top: 2px solid white;
     margin: 0.2rem 0;
-    padding: 0.8rem 0;
+    padding: 0.8rem;
     -webkit-box-shadow: inset 4px 10px 13px -12px rgba(0, 0, 0, 0.16);
     -moz-box-shadow: inset 4px 10px 13px -12px rgba(0, 0, 0, 0.16);
     box-shadow: inset 4px 10px 13px -12px rgba(0, 0, 0, 0.16);
@@ -271,8 +307,15 @@ header
 
     .modal
     {
-        left: 15%;
-        right: 15%;
+        left: 20%;
+        right: 20%;
+    }
+
+    .top-black img
+    {
+        width: 5rem;
+        height: 5rem;
+        top: 1%;
     }
 }
 
@@ -289,8 +332,8 @@ header
         right: 0;
         left: 94%;
         bottom: 8%;
-        width: 5rem;
-        height: 5rem;
+        width: 4.5rem;
+        height: 4.5rem;
         z-index: 1;
     }
 
@@ -312,7 +355,7 @@ header
     }
 }
 
-@media (min-width:1280px)
+@media (min-width:1500px)
 {
     .grid-container
     {
