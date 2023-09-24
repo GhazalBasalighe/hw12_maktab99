@@ -54,8 +54,28 @@ async function generateModal(task) {
   document.body.insertAdjacentHTML("beforeend", content);
 }
 
-//------------EVENT DELEGATION FOR TASKS-------------
+//------------SHOW MODAL-------------
+function showModal(taskId) {
+  const modal = document.querySelector(`.modal[data-task-id="${taskId}"]`);
+  const overlay = document.querySelector(".overlay");
 
+  if (modal && overlay) {
+    modal.style.display = "flex";
+    overlay.style.display = "block";
+  }
+}
+
+//------------HIDE MODAL-------------
+function hideModal(modal) {
+  const overlay = document.querySelector(".overlay");
+
+  if (modal && overlay) {
+    modal.style.display = "none";
+    overlay.style.display = "none";
+  }
+}
+
+//------------EVENT DELEGATION FOR TASKS-------------
 gridContainer.addEventListener("click", async (event) => {
   //------------DELETE MODAL AND TASK-------------
   if (event.target.classList.contains("delete-icon")) {
@@ -92,29 +112,8 @@ gridContainer.addEventListener("click", async (event) => {
   }
 });
 
-//------------SHOW MODAL-------------
-function showModal(taskId) {
-  const modal = document.querySelector(`.modal[data-task-id="${taskId}"]`);
-  const overlay = document.querySelector(".overlay");
-
-  if (modal && overlay) {
-    modal.style.display = "flex";
-    overlay.style.display = "block";
-  }
-}
-
-//------------HIDE MODAL-------------
-function hideModal(modal) {
-  const overlay = document.querySelector(".overlay");
-
-  if (modal && overlay) {
-    modal.style.display = "none";
-    overlay.style.display = "none";
-  }
-}
-
 //------------CONFIRM OR CANCEL DELETION-------------
-document.addEventListener("click", (event) => {
+document.addEventListener("click", async (event) => {
   if (event.target.id === "cancelDeleteBtn") {
     const modal = event.target.closest(".modal");
     if (modal) {
@@ -123,7 +122,6 @@ document.addEventListener("click", (event) => {
   } else if (event.target.id === "confirmDeleteBtn") {
     const modal = event.target.closest(".modal");
     const taskId = modal.dataset.taskId;
-    console.log(taskId);
     const gridItem = document.querySelector(
       `.grid-item[data-task-id="${taskId}"]`
     );
@@ -131,7 +129,24 @@ document.addEventListener("click", (event) => {
       gridItem.remove();
       hideModal(modal);
       modal.remove();
-      updateJSON("DELETE", taskId);
+      await updateJSON("DELETE", taskId);
+
+      //go one page back if page becomes empty after deletion
+      if (gridContainer.childElementCount === 0) {
+        if (currentPage > 1) {
+          currentPage--;
+        }
+        updateTasksPerPage(currentPage);
+        updateActivePage(currentPage);
+
+        // Remove the page-number element of the deleted page
+        const pageNumberToDelete = document.getElementById(
+          currentPage + 1
+        );
+        if (pageNumberToDelete) {
+          pageNumberToDelete.remove();
+        }
+      }
     }
   }
 });
