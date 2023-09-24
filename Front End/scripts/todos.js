@@ -152,92 +152,91 @@ document.addEventListener("click", async (event) => {
 });
 
 //------------PAGINATION------------
+
+const footer = document.querySelector(".bottom-gray");
+
+const taskPerPage = 12;
+let tasksTotalCount = (await getJSON()).length;
+const pageCount = Math.ceil(tasksTotalCount / taskPerPage);
+let currentPage = 1;
+
+//dynamic ui creation for page numbers
+for (let i = 1; i <= pageCount; i++) {
+  const pageNum = document.createElement("div");
+  pageNum.textContent = i;
+  pageNum.classList.add("page-number");
+  pageNum.id = i;
+  footer.appendChild(pageNum);
+}
+//------------ARROWS FUNCTIONALITY-------------
+
+//left arrow at the very beginning
+const prevPage = document.createElement("span");
+const prevpageSvg = ` <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g transform="translate(24 0) scale(-1 1)"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0h24ZM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018Zm.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01l-.184-.092Z"/><path fill="#1ab8db" d="M16.06 10.94a1.5 1.5 0 0 1 0 2.12l-5.656 5.658a1.5 1.5 0 1 1-2.121-2.122L12.879 12L8.283 7.404a1.5 1.5 0 0 1 2.12-2.122l5.658 5.657Z"/></g></g></svg>`;
+insertArrowSvg(prevPage, prevpageSvg, "afterbegin");
+
+//right arrow at the very end
+const nextPage = document.createElement("span");
+const nextPageSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0h24ZM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018Zm.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01l-.184-.092Z"/><path fill="#1ab8db" d="M16.06 10.94a1.5 1.5 0 0 1 0 2.12l-5.656 5.658a1.5 1.5 0 1 1-2.121-2.122L12.879 12L8.283 7.404a1.5 1.5 0 0 1 2.12-2.122l5.658 5.657Z"/></g></svg>`;
+insertArrowSvg(nextPage, nextPageSvg, "beforeend");
+
+//right arrow -> next page
+nextPage.addEventListener("click", () => {
+  if (currentPage < pageCount) currentPage++;
+  else return;
+  updateTasksPerPage(currentPage);
+  updateActivePage(currentPage);
+});
+
+//left arrow -> previous page
+prevPage.addEventListener("click", () => {
+  if (currentPage != 1) currentPage--;
+  else return;
+  updateTasksPerPage(currentPage);
+  updateActivePage(currentPage);
+});
+
+//page numbers themselves
+footer.addEventListener("click", (e) => {
+  if (e.target.classList.contains("page-number")) {
+    const pageId = e.target.id;
+    currentPage = pageId;
+    updateTasksPerPage(currentPage);
+    updateActivePage(currentPage);
+  }
+});
+
+//------------INSERT ARROW FOR PAGINATION-------------
+function insertArrowSvg(elemName, innerHtml, placeTo) {
+  elemName.innerHTML = `${innerHtml}`;
+  elemName.style.cursor = "pointer";
+  footer.insertAdjacentElement(`${placeTo}`, elemName);
+}
+
+//------------UPDATE TASKS ACCORDING TO PAGE-------------
+function updateTasksPerPage(currentPage) {
+  const queryParam = `?_page=${currentPage}&_limit=${taskPerPage}`;
+  generateTasks(queryParam);
+  const pageAddress = new URL(window.location.href);
+  pageAddress.searchParams.set("_page", currentPage);
+  pageAddress.searchParams.set("_limit", taskPerPage);
+  window.history.replaceState({}, "", pageAddress);
+}
+
+//------------UPDATE ACTIVE PAGE-------------
+function updateActivePage(currentPage) {
+  const pageNumbers = document.querySelectorAll(".page-number");
+  pageNumbers.forEach((pageNumber) => {
+    pageNumber.classList.remove("active-page");
+    if (pageNumber.id == currentPage) {
+      pageNumber.classList.add("active-page");
+    }
+  });
+}
+//------------MAKING FIRST PAGE ACTIVE BY DEFAULT-------------
 {
-  const footer = document.querySelector(".bottom-gray");
-
-  const taskPerPage = 12;
-  let tasksTotalCount = (await getJSON()).length;
-  const pageCount = Math.ceil(tasksTotalCount / taskPerPage);
-  let currentPage = 1;
-
-  //dynamic ui creation for page numbers
-  for (let i = 1; i <= pageCount; i++) {
-    const pageNum = document.createElement("div");
-    pageNum.textContent = i;
-    pageNum.classList.add("page-number");
-    pageNum.id = i;
-    footer.appendChild(pageNum);
-  }
-  //------------ARROWS FUNCTIONALITY-------------
-
-  //left arrow at the very beginning
-  const prevPage = document.createElement("span");
-  const prevpageSvg = ` <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g transform="translate(24 0) scale(-1 1)"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0h24ZM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018Zm.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01l-.184-.092Z"/><path fill="#1ab8db" d="M16.06 10.94a1.5 1.5 0 0 1 0 2.12l-5.656 5.658a1.5 1.5 0 1 1-2.121-2.122L12.879 12L8.283 7.404a1.5 1.5 0 0 1 2.12-2.122l5.658 5.657Z"/></g></g></svg>`;
-  insertArrowSvg(prevPage, prevpageSvg, "afterbegin");
-
-  //right arrow at the very end
-  const nextPage = document.createElement("span");
-  const nextPageSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0h24ZM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018Zm.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01l-.184-.092Z"/><path fill="#1ab8db" d="M16.06 10.94a1.5 1.5 0 0 1 0 2.12l-5.656 5.658a1.5 1.5 0 1 1-2.121-2.122L12.879 12L8.283 7.404a1.5 1.5 0 0 1 2.12-2.122l5.658 5.657Z"/></g></svg>`;
-  insertArrowSvg(nextPage, nextPageSvg, "beforeend");
-
-  //right arrow -> next page
-  nextPage.addEventListener("click", () => {
-    if (currentPage < pageCount) currentPage++;
-    else return;
-    updateTasksPerPage(currentPage);
-    updateActivePage(currentPage);
-  });
-
-  //left arrow -> previous page
-  prevPage.addEventListener("click", () => {
-    if (currentPage != 1) currentPage--;
-    else return;
-    updateTasksPerPage(currentPage);
-    updateActivePage(currentPage);
-  });
-
-  //page numbers themselves
-  footer.addEventListener("click", (e) => {
-    if (e.target.classList.contains("page-number")) {
-      const pageId = e.target.id;
-      currentPage = pageId;
-      updateTasksPerPage(currentPage);
-      updateActivePage(currentPage);
-    }
-  });
-
-  //------------INSERT ARROW FOR PAGINATION-------------
-  function insertArrowSvg(elemName, innerHtml, placeTo) {
-    elemName.innerHTML = `${innerHtml}`;
-    elemName.style.cursor = "pointer";
-    footer.insertAdjacentElement(`${placeTo}`, elemName);
-  }
-
-  //------------UPDATE TASKS ACCORDING TO PAGE-------------
-  function updateTasksPerPage(currentPage) {
-    const queryParam = `?_page=${currentPage}&_limit=${taskPerPage}`;
-    generateTasks(queryParam);
-    const pageAddress = new URL(window.location.href);
-    pageAddress.searchParams.set("_page", currentPage);
-    pageAddress.searchParams.set("_limit", taskPerPage);
-    window.history.replaceState({}, "", pageAddress);
-  }
-
-  //------------UPDATE ACTIVE PAGE-------------
-  function updateActivePage(currentPage) {
-    const pageNumbers = document.querySelectorAll(".page-number");
-    pageNumbers.forEach((pageNumber) => {
-      pageNumber.classList.remove("active-page");
-      if (pageNumber.id == currentPage) {
-        pageNumber.classList.add("active-page");
-      }
-    });
-  }
-  //------------MAKING FIRST PAGE ACTIVE BY DEFAULT-------------
-  {
-    const firstPageNumber = document.querySelector(".page-number"); //only first appearance
-    if (firstPageNumber) {
-      firstPageNumber.classList.add("active-page");
-    }
+  const firstPageNumber = document.querySelector(".page-number"); //only first appearance
+  if (firstPageNumber) {
+    firstPageNumber.classList.add("active-page");
   }
 }
