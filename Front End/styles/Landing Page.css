@@ -7,6 +7,7 @@ body
     background-attachment: fixed;
     background-size: cover;
     font-family: "Montserrat", sans-serif;
+    height: 98vh;
 }
 
 /* -----------------CONTAINER SECTION----------------- */
@@ -54,4 +55,22 @@ body
 .container button a:visited
 {
     text-decoration: none;
+}
+
+/* -----------------BREAKPOINT SECTION----------------- */
+@media (min-width:700px)
+{
+    .container
+    {
+        margin: 3rem 5rem;
+        border-radius: 25px;
+    }
+}
+
+@media (min-width:1280px)
+{
+    .container
+    {
+        margin: 4rem 10rem;
+    }
 }

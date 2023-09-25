@@ -108,13 +108,12 @@ header
 .bottom-gray
 {
     background: var(--gray);
-    height: 3rem;
+    height: 4rem;
     position: fixed;
     bottom: 0;
     width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+
 }
 
 .bottom-gray img
@@ -122,10 +121,13 @@ header
     cursor: pointer;
     position: fixed;
     bottom: 10%;
-    width: 4rem;
-    height: 4rem;
-    bottom: 2%;
-    left: 40%;
+    width: 3rem;
+    height: 3rem;
+    bottom: 4%;
+    left: 42%;
+    -webkit-box-shadow: 9px 91px 43px -62px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 9px 91px 43px -62px rgba(0, 0, 0, 0.75);
+    box-shadow: 9px 91px 43px -62px rgba(0, 0, 0, 0.75);
 }
 
 .bottom-gray img:hover
@@ -159,6 +161,15 @@ header
     transition: all 0.3s ease-in-out;
 }
 
+/*PAGINATION LIST*/
+.page-list
+{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    width: 100%;
+}
+
 /* -----------------MODAL SECTION----------------- */
 .modal
 {
@@ -173,8 +184,7 @@ header
     left: 5%;
     right: 5%;
     display: none;
-    transition: top 0.5s ease-in-out;
-    /* Animation for modal */
+
 }
 
 .modal-header
@@ -196,13 +206,12 @@ header
 
 .modal-content
 {
-    border-bottom: 2px solid white;
-    border-top: 2px solid white;
+    border: 2px solid var(--gray);
     margin: 0.2rem 0;
     padding: 0.8rem;
-    -webkit-box-shadow: inset 4px 10px 13px -12px rgba(0, 0, 0, 0.16);
-    -moz-box-shadow: inset 4px 10px 13px -12px rgba(0, 0, 0, 0.16);
-    box-shadow: inset 4px 10px 13px -12px rgba(0, 0, 0, 0.16);
+    -webkit-box-shadow: 0px 0px 41px -26px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 41px -26px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 41px -26px rgba(0, 0, 0, 0.75);
 }
 
 .modal-info
@@ -243,14 +252,14 @@ header
 {
     background-color: rgba(249, 34, 34, 0.799);
     transform: scale(1.1);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.3s ease-in-out;
 }
 
 #confirmDeleteBtn:hover
 {
     background-color: #24aecd;
     transform: scale(1.1);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.3s ease-in-out;
 }
 
 /* overlay for showing the modal */
@@ -326,6 +335,20 @@ header
         width: 5rem;
         height: 5rem;
         top: 1%;
+        left: 47%;
+    }
+
+    .bottom-gray
+    {
+        height: 4rem;
+    }
+
+    .bottom-gray img
+    {
+        left: 47%;
+        bottom: 4%;
+        width: 4rem;
+        height: 4rem;
     }
 }
 
@@ -362,6 +385,11 @@ header
     {
         font-size: 18px;
         padding: 20px;
+    }
+
+    .page-list
+    {
+        margin-bottom: 10px;
     }
 }
 

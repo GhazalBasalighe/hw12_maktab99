@@ -41,5 +41,9 @@
 
 .contant_box_404
 {
-    margin-top: -50px;
+    margin-top: 1rem;
 }
+
+/* -----------------BREAKPOINT SECTION----------------- */
+.container-fluid
+{}

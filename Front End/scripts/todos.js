@@ -154,6 +154,9 @@ document.addEventListener("click", async (event) => {
 //------------PAGINATION------------
 
 const footer = document.querySelector(".bottom-gray");
+const pageList = document.createElement("ul");
+pageList.classList.add("page-list");
+footer.appendChild(pageList);
 
 const taskPerPage = 12;
 let tasksTotalCount = (await getJSON()).length;
@@ -162,11 +165,11 @@ let currentPage = 1;
 
 //dynamic ui creation for page numbers
 for (let i = 1; i <= pageCount; i++) {
-  const pageNum = document.createElement("div");
+  const pageNum = document.createElement("li");
   pageNum.textContent = i;
   pageNum.classList.add("page-number");
   pageNum.id = i;
-  footer.appendChild(pageNum);
+  pageList.appendChild(pageNum);
 }
 //------------ARROWS FUNCTIONALITY-------------
 
@@ -210,7 +213,7 @@ footer.addEventListener("click", (e) => {
 function insertArrowSvg(elemName, innerHtml, placeTo) {
   elemName.innerHTML = `${innerHtml}`;
   elemName.style.cursor = "pointer";
-  footer.insertAdjacentElement(`${placeTo}`, elemName);
+  pageList.insertAdjacentElement(`${placeTo}`, elemName);
 }
 
 //------------UPDATE TASKS ACCORDING TO PAGE-------------
